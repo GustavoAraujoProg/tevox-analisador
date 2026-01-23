@@ -43,7 +43,7 @@ def analisar_processo_com_ia(caminho_pdf):
             "response_mime_type": "application/json"
         }
 
-        model = genai.GenerativeModel('gemini-2.0-flash', generation_config=generation_config)
+        model = genai.GenerativeModel('gemini-flash-latest', generation_config=generation_config)
         
         print(f"📤 Enviando PDF para o Google (Modo Seguro)...")
         sample_file = genai.upload_file(path=caminho_pdf, display_name="Processo Juridico")
@@ -82,7 +82,8 @@ def perguntar_ao_chat_ia(historico):
     Função específica para o Chat, também protegida contra travamentos.
     """
     try:
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        # Na função do chat
+        model = genai.GenerativeModel('gemini-flash-latest')
         
         # Chama a vacina passando o histórico da conversa
         response = gerar_resposta_com_retry(model, historico)
