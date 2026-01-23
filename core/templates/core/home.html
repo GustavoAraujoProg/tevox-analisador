@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Análise | Eduarda Nogueira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#F9F7F2',
+                            100: '#F0EBDD',
+                            400: '#D4B982',
+                            500: '#C0A062', /* Dourado Principal */
+                            600: '#A4864A',
+                            900: '#4A3B1F',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Estado de "Arrastar por cima" */
+        .drag-active {
+            border-color: #C0A062 !important; /* Dourado */
+            background-color: #F9F7F2 !important; /* Creme bem claro */
+            transform: scale(1.01);
+        }
+    </style>
+</head>
+<body class="bg-[#FAFAFA] text-slate-800 h-screen flex flex-col overflow-hidden">
+
+    <nav class="w-full bg-white border-b border-gold-100 py-5 px-8 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gold-500 text-white flex items-center justify-center rounded-sm font-serif font-bold text-lg">E</div>
+            <div class="flex flex-col">
+                <span class="font-serif font-bold text-slate-800 text-lg leading-tight tracking-wide">Eduarda Nogueira</span>
+                <span class="text-[10px] uppercase tracking-[0.2em] text-gold-600">Legal Intelligence</span>
+            </div>
+        </div>
+        <div class="text-xs text-slate-400 font-medium tracking-wide">TEVOX SYSTEMS v2.5</div>
+    </nav>
+
+    <main class="flex-1 flex flex-col items-center justify-center p-6 relative">
+        
+        <div class="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-30">
+            <div class="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-gradient-to-br from-gold-100 to-transparent blur-3xl"></div>
+            <div class="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] rounded-full bg-gradient-to-tl from-gold-100 to-transparent blur-3xl"></div>
+        </div>
+
+        <div class="text-center mb-12 max-w-2xl z-10 relative">
+            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-6 text-slate-900 tracking-tight">
+                Análise Processual <span class="text-gold-500 italic">Inteligente</span>
+            </h1>
+            <p class="text-slate-500 text-lg font-light leading-relaxed">
+                Importe os autos do processo em PDF. Nossa IA fará a leitura integral, extraindo fatos, riscos e sugestões estratégicas em segundos.
+            </p>
+        </div>
+
+        <div class="w-full max-w-xl z-10 relative">
+            <form method="POST" enctype="multipart/form-data" id="uploadForm">
+                {% csrf_token %}
+                
+                <label for="arquivo_pdf" id="dropZone" 
+                       class="flex flex-col items-center justify-center w-full h-72 border-[1.5px] border-slate-300 border-dashed rounded-xl cursor-pointer bg-white/80 backdrop-blur-sm transition-all duration-300 hover:border-gold-500 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] group">
+                    
+                    <div class="flex flex-col items-center justify-center pt-5 pb-6 text-center px-4">
+                        <div class="mb-6 p-4 bg-slate-50 rounded-full group-hover:bg-gold-50 transition-colors border border-slate-100 group-hover:border-gold-100">
+                            <svg class="w-8 h-8 text-slate-400 group-hover:text-gold-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                            </svg>
+                        </div>
+                        
+                        <p class="mb-3 text-base text-slate-600 font-medium">
+                            <span class="text-gold-600 font-bold border-b border-gold-200 hover:border-gold-500 transition-all pb-0.5">Clique para selecionar</span> ou arraste aqui
+                        </p>
+                        <p class="text-xs text-slate-400 uppercase tracking-wide">Suporta PDF (Autos Integrais)</p>
+                    </div>
+                    
+                    <input id="arquivo_pdf" name="arquivo_pdf" type="file" class="hidden" accept="application/pdf" />
+                </label>
+            </form>
+        </div>
+
+        <div class="mt-16 flex items-center gap-2 text-[10px] text-slate-400 uppercase tracking-widest z-10">
+            <svg class="w-3 h-3 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+            <span>Ambiente Criptografado</span>
+        </div>
+
+    </main>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('arquivo_pdf');
+        const form = document.getElementById('uploadForm');
+
+        // Previne comportamentos padrão do navegador
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Adiciona classe visual ao arrastar
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('drag-active'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('drag-active'), false);
+        });
+
+        // Soltar arquivo
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                uploadFile(files[0].name);
+            }
+        }
+
+        // Selecionar manual
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                uploadFile(this.files[0].name);
+            }
+        });
+
+        function uploadFile(fileName) {
+            // Animação de Carregamento Dourada
+            const textContainer = dropZone.querySelector('div');
+            textContainer.innerHTML = `
+                <div class="flex flex-col items-center animate-pulse">
+                    <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-gold-500 mb-4"></div>
+                    <p class="text-sm text-slate-800 font-semibold">Processando arquivo...</p>
+                    <p class="text-xs text-gold-600 mt-1">"${fileName}"</p>
+                    <p class="text-[10px] text-slate-400 mt-4 uppercase tracking-wider">Aguarde a IA da Tevox</p>
+                </div>
+            `;
+            
+            // Envia
+            form.submit();
+        }
+    </script>
+</body>
+</html>

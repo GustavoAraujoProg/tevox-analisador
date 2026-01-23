@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Relatório Processual | Eduarda Nogueira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            50: '#F9F7F2',
+                            100: '#F0EBDD',
+                            400: '#D4B982',
+                            500: '#C0A062',
+                            600: '#A4864A',
+                            900: '#4A3B1F',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .prose-juridico { font-size: 0.95rem; line-height: 1.7; color: #475569; }
+        .prose-juridico strong { color: #1e293b; font-weight: 600; }
+        
+        /* Scrollbar do Chat */
+        .chat-scroll::-webkit-scrollbar { width: 6px; }
+        .chat-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .chat-scroll::-webkit-scrollbar-thumb { background: #C0A062; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-[#FAFAFA] text-slate-800 min-h-screen pb-20 relative">
+
+    <header class="bg-white border-b border-gold-100 px-8 py-5 flex justify-between items-center sticky top-0 z-40 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-gold-500 text-white flex items-center justify-center rounded-sm font-serif font-bold text-lg">E</div>
+            <div class="flex flex-col">
+                <span class="font-serif font-bold text-slate-800 text-lg leading-tight tracking-wide">Eduarda Nogueira</span>
+                <span class="text-[10px] uppercase tracking-[0.2em] text-gold-600">Legal Intelligence</span>
+            </div>
+        </div>
+        <a href="{% url 'home' %}" class="group flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-gold-600 transition-colors">
+            Nova Análise
+        </a>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6 md:p-12">
+        
+        <div class="mb-10 flex flex-col md:flex-row justify-between items-start md:items-end border-b border-gold-100 pb-8 gap-4">
+            <div>
+                <span class="bg-gold-50 text-gold-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-gold-100">Análise Jurídica Preliminar</span>
+                <h1 class="text-3xl md:text-4xl font-serif font-bold mt-4 text-slate-900">Processo #{{ processo.id|stringformat:".8s" }}</h1>
+                <p class="text-slate-500 text-sm mt-2 flex items-center gap-2">
+                    Recebido em {{ processo.data_upload|date:"d/m/Y às H:i" }}
+                </p>
+            </div>
+            
+            <a href="{{ processo.arquivo_pdf.url }}" target="_blank" class="flex items-center gap-2 px-5 py-2.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:border-gold-400 hover:text-gold-600 transition-all shadow-sm">
+                Visualizar Autos (PDF)
+            </a>
+        </div>
+
+        {% if timeline %}
+        <div class="mb-12">
+            <h2 class="text-xl font-serif font-bold text-slate-900 mb-6 flex items-center gap-3">
+                <div class="p-2 bg-gold-50 rounded-lg text-gold-600">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                Linha do Tempo Fática
+            </h2>
+            
+            <div class="relative pl-8 border-l-2 border-gold-200 space-y-8">
+                {% for evento in timeline %}
+                <div class="relative group">
+                    <div class="absolute -left-[39px] top-1 w-5 h-5 rounded-full bg-white border-4 border-gold-400 group-hover:scale-110 transition-transform shadow-sm"></div>
+                    
+                    <div class="bg-white p-5 rounded-lg border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                        <span class="text-xs font-bold text-gold-600 uppercase tracking-wide bg-gold-50 px-2 py-1 rounded">{{ evento.data }}</span>
+                        <h4 class="text-lg font-bold text-slate-800 mt-2">{{ evento.evento }}</h4>
+                        <p class="text-sm text-slate-500 mt-1">{{ evento.descricao }}</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            
+            <div class="lg:col-span-8 space-y-8">
+                
+                <div class="bg-white p-8 rounded-xl shadow-[0_2px_20px_rgba(0,0,0,0.04)] border border-slate-100">
+                    <h2 class="text-xl font-serif font-bold text-slate-900 mb-6 flex items-center gap-3">
+                        <div class="p-2 bg-gold-50 rounded-lg text-gold-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        Síntese Fática
+                    </h2>
+                    <div class="prose-juridico text-justify markdown-content">
+                        {% if processo.resumo_ia %}
+                            {{ processo.resumo_ia|linebreaks }}
+                        {% else %}
+                            <div class="animate-pulse space-y-3">
+                                <div class="h-2 bg-slate-100 rounded w-full"></div>
+                                <div class="h-2 bg-slate-100 rounded w-5/6"></div>
+                                <p class="text-center text-sm text-gold-600 pt-4 font-medium">Analisando processo...</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-xl shadow-[0_2px_20px_rgba(0,0,0,0.04)] border border-slate-100 relative overflow-hidden">
+                    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-gold-400 to-gold-600"></div>
+                    <h2 class="text-xl font-serif font-bold text-slate-900 mb-6 flex items-center gap-3">
+                        <div class="p-2 bg-gold-50 rounded-lg text-gold-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        Diretrizes Estratégicas
+                    </h2>
+                    <div class="prose-juridico markdown-content">
+                        {{ processo.sugestao_estrategica|linebreaks }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 space-y-6">
+                
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2 text-sm uppercase tracking-wide">
+                        <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Pontos de Mérito
+                    </h3>
+                    <div class="text-sm text-slate-600 space-y-2 markdown-content">
+                        {{ processo.pontos_fortes|default:"-- Em análise"|linebreaks }}
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                    <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2 text-sm uppercase tracking-wide">
+                        <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        Pontos de Atenção & Risco
+                    </h3>
+                    <div class="text-sm text-slate-600 space-y-2 markdown-content">
+                        {{ processo.pontos_fracos|default:"-- Em análise"|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+        
+        <div id="chat-window" class="hidden bg-white w-80 md:w-96 h-[500px] rounded-2xl shadow-2xl border border-slate-200 mb-4 flex flex-col overflow-hidden transition-all transform origin-bottom-right scale-95">
+            <div class="bg-slate-900 p-4 flex justify-between items-center text-white">
+                <div class="flex items-center gap-2">
+                    <div class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                    <span class="font-bold font-serif">IA do Processo</span>
+                </div>
+                <button onclick="toggleChat()" class="text-slate-400 hover:text-white"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+            </div>
+            
+            <div id="chat-messages" class="flex-1 p-4 bg-slate-50 overflow-y-auto chat-scroll space-y-4">
+                <div class="flex flex-col space-y-2">
+                    <div class="bg-white p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-slate-100 text-sm text-slate-600 shadow-sm self-start max-w-[90%]">
+                        Olá! Li o processo completo. Tem alguma dúvida específica sobre datas, valores ou testemunhas?
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-3 bg-white border-t border-slate-100 flex gap-2">
+                <input type="text" id="chat-input" placeholder="Digite sua dúvida..." class="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gold-400 transition-colors" onkeypress="handleEnter(event)">
+                <button onclick="enviarMensagem()" class="bg-gold-500 hover:bg-gold-600 text-white p-2 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <button onclick="toggleChat()" class="group flex items-center gap-2 bg-slate-900 hover:bg-gold-500 text-white px-5 py-4 rounded-full shadow-lg transition-all transform hover:scale-105">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+            <span class="font-bold text-sm hidden group-hover:block transition-all">Tirar Dúvidas</span>
+        </button>
+    </div>
+
+    <script>
+        // Formatação Visual (Markdown e Limpeza)
+        document.addEventListener("DOMContentLoaded", function() {
+            const contents = document.querySelectorAll('.markdown-content');
+            contents.forEach(div => {
+                let html = div.innerHTML;
+                html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="text-slate-900">$1</strong>');
+                html = html.replace(/^\['/g, '').replace(/'\]$/g, '');
+                div.innerHTML = html;
+            });
+            {% if not processo.resumo_ia %}
+            setTimeout(function(){ window.location.reload(1); }, 5000);
+            {% endif %}
+        });
+
+        // --- LÓGICA DO CHAT ---
+        const chatId = "{{ processo.id }}";
+        const chatWindow = document.getElementById('chat-window');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+
+        function toggleChat() {
+            chatWindow.classList.toggle('hidden');
+            if(!chatWindow.classList.contains('hidden')) chatInput.focus();
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') enviarMensagem();
+        }
+
+        function addMessage(text, isUser) {
+            const div = document.createElement('div');
+            div.className = isUser 
+                ? 'bg-gold-500 text-white p-3 rounded-tl-xl rounded-tr-xl rounded-bl-xl text-sm shadow-sm self-end max-w-[90%]' 
+                : 'bg-white p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl border border-slate-100 text-sm text-slate-600 shadow-sm self-start max-w-[90%]';
+            div.innerText = text;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function enviarMensagem() {
+            const texto = chatInput.value.trim();
+            if (!texto) return;
+
+            // 1. Mostra msg do usuário
+            addMessage(texto, true);
+            chatInput.value = '';
+
+            // 2. Loading
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'text-xs text-slate-400 italic ml-2 self-start';
+            loadingDiv.innerText = 'Digitando...';
+            loadingDiv.id = 'loading-msg';
+            chatMessages.appendChild(loadingDiv);
+
+            try {
+                // 3. Chama a API
+                const response = await fetch(`/api/chat/${chatId}/`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ pergunta: texto })
+                });
+                
+                const data = await response.json();
+                
+                // 4. Remove loading e mostra resposta
+                document.getElementById('loading-msg').remove();
+                
+                if (data.resposta) {
+                    addMessage(data.resposta, false);
+                } else {
+                    addMessage("Erro: " + (data.erro || "Não consegui responder."), false);
+                }
+
+            } catch (error) {
+                document.getElementById('loading-msg')?.remove();
+                addMessage("Erro de conexão. Tente novamente.", false);
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
