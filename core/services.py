@@ -23,7 +23,7 @@ def gerar_resposta_com_retry(model, conteudo, tentativas=3):
         
         except exceptions.ResourceExhausted:
             # Se cair aqui, é porque o limite estourou. Vamos esperar.
-            tempo_espera = 10 * (i + 1) # Espera 10s, depois 20s, depois 30s...
+            tempo_espera = 2 * (i + 1)
             print(f"⚠️ Limite do Google atingido (429). Esperando {tempo_espera} segundos para tentar de novo...")
             time.sleep(tempo_espera)
             continue # Volta para o início do loop e tenta de novo
